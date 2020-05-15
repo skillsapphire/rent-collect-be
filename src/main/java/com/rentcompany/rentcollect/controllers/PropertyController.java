@@ -56,7 +56,7 @@ public class PropertyController {
 			@PathVariable(value = "propertyId") Long propertyId ) {
 		 return propertyRepository.findByIdAndUserId(propertyId, userId).map(property -> {
 			 propertyRepository.delete(property);
-	            return ResponseEntity.ok().build(property);
+	            return ResponseEntity.ok(property);
 	}).orElseThrow(() -> new ResourceNotFoundException("Property not found with id " + propertyId + " and userId " + userId));
 	}
 	

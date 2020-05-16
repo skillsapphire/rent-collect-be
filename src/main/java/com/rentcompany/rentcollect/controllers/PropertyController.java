@@ -50,6 +50,15 @@ public class PropertyController {
         }).orElseThrow(() -> new ResourceNotFoundException("UserId " + userId + " not found"));
     }
 	
+	@GetMapping("/user/{userId}/property/{propertyId}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> getProperty(@PathVariable(value = "userId") Long userId,
+			@PathVariable(value = "propertyId") Long propertyId ) {
+		 return propertyRepository.findByIdAndUserId(propertyId, userId).map(property -> {
+	            return ResponseEntity.ok(property);
+	}).orElseThrow(() -> new ResourceNotFoundException("Property not found with id " + propertyId + " and userId " + userId));
+	}
+	
 	@DeleteMapping("/user/{userId}/property/{propertyId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteProperty(@PathVariable(value = "userId") Long userId,
@@ -61,6 +70,7 @@ public class PropertyController {
 	}
 	
 	@PutMapping("/user/{userId}/property/{propertyId}")
+	@PreAuthorize("hasRole('ADMIN')")
     public Property updateProperty(@PathVariable (value = "userId") Long userId,
                                  @PathVariable (value = "propertyId") Long propertyId,
                                  @Valid @RequestBody Property propertyReq) {
@@ -70,6 +80,7 @@ public class PropertyController {
 
         return propertyRepository.findById(propertyId).map(property -> {
         	property.setName(propertyReq.getName());
+        	property.setDescription(propertyReq.getDescription());
             return propertyRepository.save(property);
         }).orElseThrow(() -> new ResourceNotFoundException("PropertyId " + propertyId + " not found"));
     }

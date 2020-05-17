@@ -52,7 +52,7 @@ public class PropertyController {
 	
 	@GetMapping("/user/{userId}/property/{propertyId}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> getProperty(@PathVariable(value = "userId") Long userId,
+	public ResponseEntity<Property> getProperty(@PathVariable(value = "userId") Long userId,
 			@PathVariable(value = "propertyId") Long propertyId ) {
 		 return propertyRepository.findByIdAndUserId(propertyId, userId).map(property -> {
 	            return ResponseEntity.ok(property);

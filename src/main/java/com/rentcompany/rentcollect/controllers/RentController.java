@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import com.rentcompany.rentcollect.models.Property;
 import com.rentcompany.rentcollect.models.Rent;
 import com.rentcompany.rentcollect.models.Role;
 import com.rentcompany.rentcollect.models.User;
+import com.rentcompany.rentcollect.payload.response.RentDetail;
 import com.rentcompany.rentcollect.repository.PropertyRepository;
 import com.rentcompany.rentcollect.repository.RentRepository;
 import com.rentcompany.rentcollect.repository.RoleRepository;
@@ -81,5 +83,19 @@ public class RentController {
 		rentRepository.save(rent);
 		return rent;
 		
+	}
+	
+	@GetMapping("/rent/{userId}")
+	public RentDetail getTenantRentDetail(
+			@PathVariable(value = "userId") Long userId) {
+		
+		RentDetail rentDetail = new RentDetail();
+		Rent rent = rentRepository.findTenantRentDetail(userId);
+		Optional<Property> property = propertyRepository.findById(rent.getProperty().getId());
+		rentDetail.setRentAmount(rent.getRentAmount());
+		rentDetail.setStartDate(rent.getStartDate());
+		rentDetail.setPropertyDesc(property.get().getDescription());
+		rentDetail.setPropertyName(property.get().getName());
+		return rentDetail;
 	}
 }

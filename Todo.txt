@@ -15,3 +15,7 @@
 15. password validation while create rent
 16. proper email template
 17. show spinner/loading while creating property
+18. owner reporting
+19. owner reminder to tenant for rent
+20. rent payment status in rent details screen for tenant and owner
+21. different payment links for different owners [https://test.instamojo.com/links/?enabled=true]

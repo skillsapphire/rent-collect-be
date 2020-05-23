@@ -26,6 +26,7 @@ import com.rentcompany.rentcollect.repository.PropertyRepository;
 import com.rentcompany.rentcollect.repository.RentRepository;
 import com.rentcompany.rentcollect.repository.RoleRepository;
 import com.rentcompany.rentcollect.repository.UserRepository;
+import com.rentcompany.rentcollect.util.EmailService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -46,6 +47,9 @@ public class RentController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	/*@PostMapping("/rent/{userId}/property/{propertyId}")
 	public Rent rentProperty(@PathVariable(value = "userId") Long userId,
@@ -81,6 +85,10 @@ public class RentController {
 		rent.setProperty(property.get());
 		rent.setUser(user);
 		rentRepository.save(rent);
+		String body = "Username: "+rent.getUser().getUsername()+"<br>"
+					  +"Password: "+rent.getUser().getPassword()+"<br>"
+					  +"Website address: http://localhost:8080/";
+		emailService.sendEmail(user.getEmail(), "Your login details", body);
 		return rent;
 		
 	}

@@ -3,7 +3,9 @@ package com.rentcompany.rentcollect.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rentcompany.rentcollect.exception.ResourceNotFoundException;
@@ -34,9 +37,16 @@ public class PropertyController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Value("${spring.data.web.pageable.default-page-size}")
+	private int pageSize;
+	
 	@GetMapping("/property/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public Page<Property> getAllProprties(@PathVariable(value = "userId") Long userId, Pageable pageable) {
+	public Page<Property> getAllProprties(@PathVariable(value = "userId") Long userId, 
+			@RequestParam("page") int page) {
+		//https://dzone.com/articles/pagination-in-springboot-applications
+		//http://zetcode.com/springboot/pagination/
+		Pageable pageable = PageRequest.of(page, pageSize);
 		return propertyRepository.findByUserId(userId, pageable);
 	}
 	

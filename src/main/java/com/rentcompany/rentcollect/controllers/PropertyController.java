@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,10 +44,13 @@ public class PropertyController {
 	@GetMapping("/property/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public Page<Property> getAllProprties(@PathVariable(value = "userId") Long userId, 
-			@RequestParam("page") int page) {
+			@RequestParam("page") int page, @RequestParam(defaultValue = "desc", value = "sortType") String sortType, 
+			@RequestParam(defaultValue = "createdAt", value = "sortField") String sortField) {
 		//https://dzone.com/articles/pagination-in-springboot-applications
 		//http://zetcode.com/springboot/pagination/
-		Pageable pageable = PageRequest.of(page, pageSize);
+		//http://zetcode.com/springboot/datajpasort/
+		Sort sort = new Sort(sortType.equalsIgnoreCase("asc")?Sort.Direction.ASC:Sort.Direction.DESC, sortField);
+		Pageable pageable = PageRequest.of(page, pageSize, sort);
 		return propertyRepository.findByUserId(userId, pageable);
 	}
 	

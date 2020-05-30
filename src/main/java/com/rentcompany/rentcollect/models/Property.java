@@ -38,9 +38,11 @@ public class Property extends Audit{
 	@Size(max = 100)
 	private String name;
 	
-	@NotBlank
+	@NotBlank	
 	@Size(max = 500)
 	private String description;
+	
+	private boolean isRented;
 
 	public Long getId() {
 		return id;
@@ -72,6 +74,14 @@ public class Property extends Audit{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isRented() {
+		return isRented;
+	}
+
+	public void setRented(boolean isRented) {
+		this.isRented = isRented;
 	}
 	
 	

@@ -9,7 +9,9 @@ public class RentDetail {
 	private String propertyName;
 	private String propertyDesc;
 	private String email;
-	
+	private String password;
+	private String ownerEmail;
+	private String renteeName;
 	public Double getRentAmount() {
 		return rentAmount;
 	}
@@ -41,5 +43,38 @@ public class RentDetail {
 	public void setPropertyDesc(String propertyDesc) {
 		this.propertyDesc = propertyDesc;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getOwnerEmail() {
+		return ownerEmail;
+	}
+
+	public void setOwnerEmail(String ownerEmail) {
+		this.ownerEmail = ownerEmail;
+	}
+
+	public String getRenteeName() {
+		return renteeName;
+	}
+
+	public void setRenteeName(String renteeName) {
+		this.renteeName = renteeName;
+	}
+	
 
 	}

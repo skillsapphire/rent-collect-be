@@ -14,7 +14,12 @@ import javax.validation.constraints.Size;
 			@UniqueConstraint(columnNames = "username"),
 			@UniqueConstraint(columnNames = "email") 
 		})
-public class User {
+public class User extends Audit{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2101802534824389058L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

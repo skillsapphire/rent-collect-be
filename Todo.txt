@@ -1,0 +1,27 @@
+1.Email sending utility 
+2.Password Reset
+3.send email to tenant and owner while renting -NA
+4.send email on receiving rent-done with dummy API
+5.Enrich data models with different fields.
+6.Pagination on owner all properties view
+7.Unauthorized scenarios should redirect to login-done
+8.Payment gateway integration
+9.Tenant to upload proof --
+10.send sms by twilio service
+11. cannot rent already rented property - validation -done
+12. field validation on FE and BE and proper error message ---
+13. moderator functionality
+14. send email while login, register etc
+15. password validation while create rent
+16. proper email template
+17. show spinner/loading while creating property and rent
+18. owner reporting
+19. owner reminder to tenant for rent
+20. rent payment status in rent details screen for tenant and owner
+21. different payment links for different owners [https://test.instamojo.com/links/?enabled=true]
+22. show properties to owner in descending order of date
+23. improve owner/tenant profile page
+24. profile details can be updated
+25. sorting
+26. searching
+27. Transactional

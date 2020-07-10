@@ -45,14 +45,25 @@ public class PropertyController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public Page<Property> getAllProprties(@PathVariable(value = "userId") Long userId, 
 			@RequestParam("page") int page, @RequestParam(defaultValue = "desc", value = "sortType") String sortType, 
-			@RequestParam(defaultValue = "createdAt", value = "sortField") String sortField) {
+			@RequestParam(defaultValue = "createdAt", value = "sortField") String sortField,
+			@RequestParam(value = "searchedProperty") String searchedProperty){
 		//https://dzone.com/articles/pagination-in-springboot-applications
-		//http://zetcode.com/springboot/pagination/
-		//http://zetcode.com/springboot/datajpasort/
+				//http://zetcode.com/springboot/pagination/
+				//http://zetcode.com/springboot/datajpasort/
+		if(!searchedProperty.equals("")){
+			sortField = "created_at";
+			
+		}
 		Sort sort = new Sort(sortType.equalsIgnoreCase("asc")?Sort.Direction.ASC:Sort.Direction.DESC, sortField);
 		Pageable pageable = PageRequest.of(page, pageSize, sort);
-		return propertyRepository.findByUserId(userId, pageable);
+		
+		if(!searchedProperty.equals("")){
+			return propertyRepository.findBySearchedProperty(userId, searchedProperty,pageable);
+		}else{
+			return propertyRepository.findByUserId(userId, pageable);
+		}
 	}
+	
 	
 	@PostMapping("/property/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -83,6 +94,8 @@ public class PropertyController {
 	}).orElseThrow(() -> new ResourceNotFoundException("Property not found with id " + propertyId + " and userId " + userId));
 	}
 	
+	
+	
 	@PutMapping("/user/{userId}/property/{propertyId}")
 	@PreAuthorize("hasRole('ADMIN')")
     public Property updateProperty(@PathVariable (value = "userId") Long userId,
@@ -98,4 +111,5 @@ public class PropertyController {
             return propertyRepository.save(property);
         }).orElseThrow(() -> new ResourceNotFoundException("PropertyId " + propertyId + " not found"));
     }
+	
 }

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "rent")
@@ -26,6 +27,7 @@ public class Rent {
 	@OneToOne
 	@JoinColumn(name="tenant_id")
 	private User user;
+	
 	public Long getId() {
 		return id;
 	}

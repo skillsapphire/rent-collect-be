@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rentcompany.rentcollect.exception.ResourceAlreadyExist;
 import com.rentcompany.rentcollect.exception.ResourceNotFoundException;
 import com.rentcompany.rentcollect.models.ERole;
 import com.rentcompany.rentcollect.models.Property;
@@ -72,9 +75,12 @@ public class RentController {
 	
 	
 	@PostMapping("/rent/{propertyId}")
-	public Rent rentProperty(
-			@PathVariable(value = "propertyId") Long propertyId, @Valid @RequestBody Rent rent) {
-		
+	public ResponseEntity<?> rentProperty(
+			@PathVariable(value = "propertyId") Long propertyId, @Valid @RequestBody Rent rent) throws ResourceAlreadyExist{
+		Optional<User> userOPt = userRepository.existsByPhoneNumber(rent.getUser().getPhoneNumber());
+		if(userOPt.isPresent()){
+			throw new ResourceAlreadyExist("ERR_007", "Tenant Already Exists "+rent.getUser().getUsername()); 
+		}
 		User tenant = new User();
 		tenant.setUsername(rent.getUser().getUsername());
 		tenant.setEmail(rent.getUser().getEmail());
@@ -84,6 +90,7 @@ public class RentController {
 				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 		roles.add(userRole);
 		tenant.setRoles(roles);
+		tenant.setPhoneNumber(rent.getUser().getPhoneNumber());
 		User user = userRepository.save(tenant);
 		Optional<Property> property = propertyRepository.findById(propertyId);
 		property.get().setRented(true);
@@ -97,8 +104,7 @@ public class RentController {
 					  +"Password: "+rent.getUser().getPassword()+"<br>"
 					  +"Website address: http://localhost:8080/";
 		emailService.sendEmail(user.getEmail(), "Your login details", body);
-		return rent;
-		
+		return new ResponseEntity<Rent>(rent, HttpStatus.OK);
 	}
 	
 	@GetMapping("/rent/{userId}")

@@ -42,6 +42,8 @@ public class User extends Audit{
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
+	
+	private String phoneNumber;
 
 	public User() {
 	}
@@ -91,4 +93,13 @@ public class User extends Audit{
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
 }
